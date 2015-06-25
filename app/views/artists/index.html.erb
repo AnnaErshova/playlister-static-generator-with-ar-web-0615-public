@@ -1,1 +1,16 @@
-<%= @artists.collect {|artist| artist.name} %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Artists</title>
+  </head>
+  
+  <body>
+    <ul>
+      <% @artists.each do |artist| %>
+      <li> 
+        <a href="<%= artist.to_slug %>.html"> <%=artist.name %> </a> 
+      </li>
+      <% end %> 
+    </ul>
+  </body>
+</html>

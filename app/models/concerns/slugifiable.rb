@@ -1,12 +1,12 @@
 module Slugifiable 
   
-  module ClassMethods
-  end
+  #module ClassMethods
+  #end
   
   module InstanceMethods
     def to_slug
       self.name.downcase.gsub(" ", "-")
-    end 
-  end
+    end # end method
+  end # end instance method
 
-end
+end # end module

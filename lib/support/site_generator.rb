@@ -1,22 +1,34 @@
 class SiteGenerator
 
-  def initialize(path)
-    @path = path
+  attr_accessor :rendered_path
+
+  def initialize(rendered_path)
+    @rendered_path = rendered_path
   end
 
-  def rendered_path
-    @path
-  end
-
+#_______________
   def build_index
-    template = ERB.new(File.read("app/views/index.html.erb"))
-    result = template.result(binding)
-    @artists = Artist.all
-    @songs = Song.all 
-    @genres = Genre.all
-    FileUtils.mkdir_p(rendered_path)
-      File.write("#{rendered_path}/index.html", result)
+    # template = ERB.new(File.read("app/views/index.html.erb"))
+    # result = template.result(binding) # don't need a binding because there are no exampples that it is using
+    make_rendered_directory
+    content = make_content
+    write_output(content)
   end
+
+  def make_rendered_directory
+    FileUtils.rm_rf(rendered_path) # just in case
+    FileUtils.mkdir_p(rendered_path)
+  end
+
+  def make_content
+    html = File.read("app/views/index.html.erb")
+    content = ERB.new(html).result
+  end
+
+  def write_output(content)
+    File.write("#{rendered_path}/index.html", content)
+  end
+#---------------
 
   def build_artists_index
     template = ERB.new(File.read("app/views/artists/index.html.erb"))
@@ -37,6 +49,8 @@ class SiteGenerator
     end
   end
 
+#--------------- 
+
   def build_genres_index
     template = ERB.new(File.read("app/views/genres/index.html.erb"))
     @genres = Genre.all
@@ -56,6 +70,7 @@ class SiteGenerator
     end
   end
 
+#---------------
   def build_songs_index
     template = ERB.new(File.read("app/views/songs/index.html.erb"))
     @songs = Song.all
@@ -74,5 +89,7 @@ class SiteGenerator
       File.write("#{rendered_path}/songs/#{song.to_slug}.html", result)
     end
   end
+
+#---------------
 
 end # end class
